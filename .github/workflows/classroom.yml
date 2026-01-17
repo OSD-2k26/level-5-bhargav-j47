@@ -5,20 +5,17 @@ jobs:
   validate:
     runs-on: ubuntu-latest
     steps:
-      - name: Checkout full history
+      - name: Checkout repository
         uses: actions/checkout@v4
         with:
-          fetch-depth: 0 # Essential: Gets all commits
-          fetch-tags: true
+          fetch-depth: 0 # Gets all history for all branches
 
-      - name: Fix branch visibility
+      - name: Force fetch all branches
         run: |
-          # This forces the runner to see all remote branches as 'origin/branch'
-          git remote set-branches origin '*'
-          git fetch origin --quiet
+          # This is the "magic" command that fixes 'branch not found'
+          git fetch --prune --unshallow origin "+refs/heads/*:refs/remotes/origin/*"
 
-      - name: Make validator executable
-        run: chmod +x validate.sh
-
-      - name: Run validation
-        run: ./validate.sh
+      - name: Run validator
+        run: |
+          chmod +x validate.sh
+          ./validate.sh
