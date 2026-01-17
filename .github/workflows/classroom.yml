@@ -1,4 +1,4 @@
-name: Git CTF Level Ω Validator
+name: Git CTF Level 5 Validator
 
 on:
   push:
